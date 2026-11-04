@@ -29,6 +29,11 @@ class ExportVaultUseCase(
         return VaultDataExporter.exportToMarkdown(items, collections, tags)
     }
 
+    suspend fun exportCsv(): String {
+        val items = savedItemRepository.getAllWithDetails().first()
+        return VaultDataExporter.exportItemsToCsv(items)
+    }
+
     suspend fun exportScreenTimeCsv(lookbackDays: Int = 30): String {
         val today = LocalDate.now()
         val start = today.minusDays(lookbackDays.toLong()).toString()

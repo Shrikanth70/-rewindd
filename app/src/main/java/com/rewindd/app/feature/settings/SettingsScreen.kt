@@ -51,6 +51,9 @@ import com.rewindd.app.core.designsystem.theme.ChampagneGold
 import com.rewindd.app.core.designsystem.theme.CypressGreen
 import com.rewindd.app.core.designsystem.theme.DewSage
 import com.rewindd.app.core.designsystem.theme.HeadlineSmall
+import com.rewindd.app.core.designsystem.theme.IconBotanical
+import com.rewindd.app.core.designsystem.theme.IconGold
+import com.rewindd.app.core.designsystem.theme.IconNeutral
 import com.rewindd.app.core.designsystem.theme.LabelSmall
 import com.rewindd.app.core.designsystem.theme.OutlineVariant
 import com.rewindd.app.core.designsystem.theme.RoseSignal
@@ -125,7 +128,7 @@ fun SettingsScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = TextChampagne,
+                            tint = TextParchment,
                             modifier = Modifier.size(18.dp)
                         )
                     }
@@ -215,7 +218,7 @@ fun SettingsScreen(
                                 Icon(
                                     imageVector = if (isDarkMode) Icons.Default.DarkMode else Icons.Default.LightMode,
                                     contentDescription = null,
-                                    tint = ChampagneGold,
+                                    tint = IconGold,
                                     modifier = Modifier.size(18.dp)
                                 )
                             }
@@ -285,14 +288,14 @@ fun SettingsScreen(
                                         .frostedRimHighlight(RoundedCornerShape(10.dp), topAlpha = 0.22f),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    Icon(Icons.Filled.RestartAlt, null, tint = DewSage, modifier = Modifier.size(18.dp))
+                                    Icon(Icons.Filled.RestartAlt, null, tint = IconBotanical, modifier = Modifier.size(18.dp))
                                 }
                                 Column {
                                     Text("Replay Onboarding Tour", style = TitleMedium.copy(fontSize = 15.sp), fontWeight = FontWeight.SemiBold, color = TextParchment)
                                     Text("Inspect welcome & sanctuary tutorial steps", style = LabelSmall, color = TextDewSage)
                                 }
                             }
-                            Icon(Icons.Filled.ChevronRight, null, tint = TextLichenMuted)
+                            Icon(Icons.Filled.ChevronRight, null, tint = IconNeutral)
                         }
                     }
                 }
@@ -335,14 +338,14 @@ fun SettingsScreen(
                                         .frostedRimHighlight(RoundedCornerShape(10.dp), topAlpha = 0.22f),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    Icon(Icons.Filled.VerifiedUser, null, tint = DewSage, modifier = Modifier.size(18.dp))
+                                    Icon(Icons.Filled.VerifiedUser, null, tint = IconBotanical, modifier = Modifier.size(18.dp))
                                 }
                                 Column {
                                     Text("Privacy Center", style = TitleMedium.copy(fontSize = 15.sp), fontWeight = FontWeight.SemiBold, color = TextParchment)
                                     Text("Enforced zero-telemetry boundary", style = LabelSmall, color = TextDewSage)
                                 }
                             }
-                            Icon(Icons.Filled.ChevronRight, null, tint = TextLichenMuted)
+                            Icon(Icons.Filled.ChevronRight, null, tint = IconNeutral)
                         }
 
                         Box(
@@ -373,14 +376,14 @@ fun SettingsScreen(
                                         .frostedRimHighlight(RoundedCornerShape(10.dp), topAlpha = 0.22f),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    Icon(Icons.Filled.Download, null, tint = ChampagneGold, modifier = Modifier.size(18.dp))
+                                    Icon(Icons.Filled.Download, null, tint = IconGold, modifier = Modifier.size(18.dp))
                                 }
                                 Column {
-                                    Text("Export Data (JSON)", style = TitleMedium.copy(fontSize = 15.sp), fontWeight = FontWeight.SemiBold, color = TextParchment)
+                                    Text("Export Data (Vault)", style = TitleMedium.copy(fontSize = 15.sp), fontWeight = FontWeight.SemiBold, color = TextParchment)
                                     Text("Save offline backup of all links & tags", style = LabelSmall, color = TextDewSage)
                                 }
                             }
-                            Icon(Icons.Filled.ChevronRight, null, tint = TextLichenMuted)
+                            Icon(Icons.Filled.ChevronRight, null, tint = IconNeutral)
                         }
 
                         Box(
@@ -466,7 +469,7 @@ fun SettingsScreen(
                             }
                         }
 
-                        Icon(Icons.Filled.ChevronRight, null, tint = TextLichenMuted)
+                        Icon(Icons.Filled.ChevronRight, null, tint = IconNeutral)
                     }
                 }
             }

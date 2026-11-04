@@ -21,10 +21,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.HourglassBottom
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.Storage
 import androidx.compose.material.icons.filled.VerifiedUser
@@ -56,6 +57,9 @@ import com.rewindd.app.core.designsystem.theme.ChampagneGold
 import com.rewindd.app.core.designsystem.theme.DewSage
 import com.rewindd.app.core.designsystem.theme.EditorialSerif
 import com.rewindd.app.core.designsystem.theme.HeadlineSmall
+import com.rewindd.app.core.designsystem.theme.IconBotanical
+import com.rewindd.app.core.designsystem.theme.IconGold
+import com.rewindd.app.core.designsystem.theme.IconNeutral
 import com.rewindd.app.core.designsystem.theme.OutlineVariant
 import com.rewindd.app.core.designsystem.theme.RoseSignal
 import com.rewindd.app.core.designsystem.theme.SurfaceElevated
@@ -69,24 +73,23 @@ import com.rewindd.app.core.designsystem.theme.TitleMedium
 import com.rewindd.app.core.designsystem.theme.ambientGlow
 import com.rewindd.app.core.designsystem.theme.frostedRimHighlight
 import com.rewindd.app.core.designsystem.theme.tactilePress
-import com.rewindd.app.core.permissions.UsageAccessManager
-import com.rewindd.app.core.permissions.UsageAccessManagerImpl
 
 /**
- * Screen 43 — Privacy Center Screen with Live Permission Audit
- * Refactored into Botanical Editorial Noir luxury sanctuary style.
+ * Screen 43 — Privacy Center Screen
+ * 100% Local-first sanctuary privacy audit & guarantees:
+ * - Local-First SQLite Database
+ * - Zero Device or App Surveillance
+ * - Zero Background Scraping
+ * - Zero Ad Brokers or Telemetry SDKs
  */
 @Composable
 fun PrivacyCenterScreen(
     onBack: () -> Unit,
-    modifier: Modifier = Modifier,
-    usageAccessManager: UsageAccessManager? = null
+    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    val accessManager = remember(context) { usageAccessManager ?: UsageAccessManagerImpl(context) }
 
-    var hasUsagePermission by remember { mutableStateOf(accessManager.hasPermission()) }
     var hasNotificationPermission by remember {
         mutableStateOf(NotificationManagerCompat.from(context).areNotificationsEnabled())
     }
@@ -94,7 +97,6 @@ fun PrivacyCenterScreen(
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                hasUsagePermission = accessManager.hasPermission()
                 hasNotificationPermission = NotificationManagerCompat.from(context).areNotificationsEnabled()
             }
         }
@@ -170,7 +172,7 @@ fun PrivacyCenterScreen(
                             Icon(
                                 Icons.Default.VerifiedUser,
                                 contentDescription = null,
-                                tint = DewSage,
+                                tint = IconBotanical,
                                 modifier = Modifier.size(14.dp)
                             )
                             Text(
@@ -201,7 +203,7 @@ fun PrivacyCenterScreen(
                         Text(
                             "LOCAL-FIRST",
                             style = BadgeCaps.copy(fontSize = 9.sp),
-                            color = TextLichenMuted
+                            color = IconBotanical
                         )
                     }
                 }
@@ -240,7 +242,7 @@ fun PrivacyCenterScreen(
                             Icon(
                                 Icons.Default.Shield,
                                 contentDescription = null,
-                                tint = DewSage,
+                                tint = IconBotanical,
                                 modifier = Modifier.size(22.dp)
                             )
                         }
@@ -260,7 +262,7 @@ fun PrivacyCenterScreen(
                     }
 
                     Text(
-                        text = "Rewindd was architected with a strict local-first privacy boundary. We have no accounts, no cloud database, no trackers, and no ad brokers.",
+                        text = "Rewindd is built with a strict local-first privacy contract. No accounts, no cloud database, no trackers, and zero background app surveillance.",
                         style = BodyMedium.copy(fontSize = 13.sp, lineHeight = 19.sp),
                         color = TextDewSage
                     )
@@ -277,12 +279,12 @@ fun PrivacyCenterScreen(
                             Icon(
                                 Icons.Default.Lock,
                                 contentDescription = null,
-                                tint = TextLichenMuted,
+                                tint = IconNeutral,
                                 modifier = Modifier.size(14.dp)
                             )
                             Text(
-                                "Encrypted Device Realm",
-                                fontSize = 11.sp,
+                                "Encrypted On-Device Realm",
+                                fontSize = 11.5.sp,
                                 fontWeight = FontWeight.Medium,
                                 color = TextDewSage
                             )
@@ -295,17 +297,17 @@ fun PrivacyCenterScreen(
                             Text(
                                 "Offline Verified",
                                 style = BadgeCaps.copy(fontSize = 9.sp),
-                                color = DewSage
+                                color = IconBotanical
                             )
                         }
                     }
                 }
             }
 
-            // LIVE SYSTEM PERMISSION AUDIT
+            // LIVE PRIVACY & INTEGRATION AUDIT
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(
-                    text = "LIVE SYSTEM PERMISSION AUDIT",
+                    text = "LIVE SYSTEM AUDIT",
                     style = BadgeCaps.copy(fontSize = 11.sp),
                     color = TextLichenMuted
                 )
@@ -319,7 +321,7 @@ fun PrivacyCenterScreen(
                         .padding(16.dp)
                 ) {
                     Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                        // Audit Item 1: Usage Access
+                        // Audit Item 1: Local SQLite Storage
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
@@ -338,22 +340,22 @@ fun PrivacyCenterScreen(
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Icon(
-                                        imageVector = Icons.Default.HourglassBottom,
+                                        imageVector = Icons.Default.Storage,
                                         contentDescription = null,
-                                        tint = if (hasUsagePermission) DewSage else ChampagneGold,
+                                        tint = IconGold,
                                         modifier = Modifier.size(18.dp)
                                     )
                                 }
                                 Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                                     Text(
-                                        text = "Usage Stats Access",
+                                        text = "On-Device Storage",
                                         fontWeight = FontWeight.SemiBold,
                                         fontSize = 14.sp,
                                         color = TextParchment
                                     )
                                     Text(
-                                        text = if (hasUsagePermission) "Calculates foreground dwell time locally" else "Required to correlate dwell time with links",
-                                        fontSize = 11.sp,
+                                        text = "Private SQLite database inside app sandbox",
+                                        fontSize = 11.5.sp,
                                         color = TextDewSage
                                     )
                                 }
@@ -361,33 +363,71 @@ fun PrivacyCenterScreen(
 
                             Box(
                                 modifier = Modifier
-                                    .frostedRimHighlight(
-                                        shape = RoundedCornerShape(8.dp),
-                                        topAlpha = if (hasUsagePermission) 0.15f else 0.35f
-                                    )
-                                    .background(
-                                        if (hasUsagePermission) SurfaceElevated else ChampagneGold,
-                                        RoundedCornerShape(8.dp)
-                                    )
-                                    .tactilePress()
-                                    .clickable {
-                                        try {
-                                            context.startActivity(accessManager.createSettingsIntent())
-                                        } catch (_: Exception) {
-                                            // Fallback
-                                        }
-                                    }
+                                    .background(SurfaceElevated, RoundedCornerShape(8.dp))
                                     .padding(horizontal = 10.dp, vertical = 6.dp)
                             ) {
                                 Text(
-                                    text = if (hasUsagePermission) "ACTIVE" else "GRANT",
+                                    text = "SECURED",
                                     style = BadgeCaps.copy(fontSize = 10.sp),
-                                    color = if (hasUsagePermission) DewSage else CanvasNoir
+                                    color = IconBotanical
                                 )
                             }
                         }
 
-                        // Audit Item 2: Notifications
+                        // Audit Item 2: Android Share Sheet
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(36.dp)
+                                        .background(SurfaceTray, RoundedCornerShape(10.dp))
+                                        .frostedRimHighlight(shape = RoundedCornerShape(10.dp)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Share,
+                                        contentDescription = null,
+                                        tint = IconBotanical,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                }
+                                Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                                    Text(
+                                        text = "1-Tap Share Receiver",
+                                        fontWeight = FontWeight.SemiBold,
+                                        fontSize = 14.sp,
+                                        color = TextParchment
+                                    )
+                                    Text(
+                                        text = "Captures links on demand without background access",
+                                        fontSize = 11.5.sp,
+                                        color = TextDewSage
+                                    )
+                                }
+                            }
+
+                            Box(
+                                modifier = Modifier
+                                    .background(SurfaceElevated, RoundedCornerShape(8.dp))
+                                    .padding(horizontal = 10.dp, vertical = 6.dp)
+                            ) {
+                                Text(
+                                    text = "ACTIVE",
+                                    style = BadgeCaps.copy(fontSize = 10.sp),
+                                    color = IconBotanical
+                                )
+                            }
+                        }
+
+                        // Audit Item 3: Mindful Reminders (Notifications)
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
@@ -408,20 +448,20 @@ fun PrivacyCenterScreen(
                                     Icon(
                                         imageVector = Icons.Default.Notifications,
                                         contentDescription = null,
-                                        tint = if (hasNotificationPermission) DewSage else TextLichenMuted,
+                                        tint = if (hasNotificationPermission) IconBotanical else IconNeutral,
                                         modifier = Modifier.size(18.dp)
                                     )
                                 }
                                 Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                                     Text(
-                                        text = "Mindful Reminders",
+                                        text = "Rewind Notifications",
                                         fontWeight = FontWeight.SemiBold,
                                         fontSize = 14.sp,
                                         color = TextParchment
                                     )
                                     Text(
-                                        text = if (hasNotificationPermission) "Spaced repetition notifications permitted" else "Notifications muted in system settings",
-                                        fontSize = 11.sp,
+                                        text = if (hasNotificationPermission) "Daily review reminders enabled" else "Optional reminders muted in system settings",
+                                        fontSize = 11.5.sp,
                                         color = TextDewSage
                                     )
                                 }
@@ -452,7 +492,7 @@ fun PrivacyCenterScreen(
                                 Text(
                                     text = if (hasNotificationPermission) "ACTIVE" else "MANAGE",
                                     style = BadgeCaps.copy(fontSize = 10.sp),
-                                    color = if (hasNotificationPermission) DewSage else TextDewSage
+                                    color = if (hasNotificationPermission) IconBotanical else TextChampagne
                                 )
                             }
                         }
@@ -479,7 +519,7 @@ fun PrivacyCenterScreen(
                     Text(
                         "4 / 4 ENFORCED",
                         style = BadgeCaps.copy(fontSize = 9.sp),
-                        color = DewSage
+                        color = IconBotanical
                     )
                 }
             }
@@ -507,20 +547,20 @@ fun PrivacyCenterScreen(
                             Icon(
                                 Icons.Default.Storage,
                                 contentDescription = null,
-                                tint = ChampagneGold,
+                                tint = IconGold,
                                 modifier = Modifier.size(16.dp)
                             )
                         }
                         Text(
-                            "1. Local-First Storage (SQLite FTS5)",
+                            "1. 100% Local SQLite Storage",
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 14.sp,
                             color = TextParchment
                         )
                     }
                     Text(
-                        "All saved links, margin notes, tags, and reading progress are stored exclusively on your device. Zero cloud backups unless you manually export.",
-                        style = BodyMedium.copy(fontSize = 12.sp, lineHeight = 18.sp),
+                        "All saved bookmarks, personal notes, tags, and collections live exclusively on your physical phone. No cloud database or sync servers.",
+                        style = BodyMedium.copy(fontSize = 12.5.sp, lineHeight = 18.sp),
                         color = TextDewSage
                     )
                     Box(
@@ -531,14 +571,14 @@ fun PrivacyCenterScreen(
                     ) {
                         Text(
                             "STORED ON-DEVICE ONLY",
-                            style = BadgeCaps.copy(fontSize = 8.sp),
-                            color = DewSage
+                            style = BadgeCaps.copy(fontSize = 8.5.sp),
+                            color = IconBotanical
                         )
                     }
                 }
             }
 
-            // Pillar 2: Screen-Time Privacy
+            // Pillar 2: Zero App Surveillance
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -559,22 +599,22 @@ fun PrivacyCenterScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
-                                Icons.Default.HourglassBottom,
+                                Icons.Default.Shield,
                                 contentDescription = null,
-                                tint = DewSage,
+                                tint = IconBotanical,
                                 modifier = Modifier.size(16.dp)
                             )
                         }
                         Text(
-                            "2. Screen-Time Usage Telemetry",
+                            "2. Zero App or Screen Surveillance",
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 14.sp,
                             color = TextParchment
                         )
                     }
                     Text(
-                        "Measures foreground dwell time via Android UsageStatsManager. Never inspects screen pixels, keystrokes, incognito windows, or notification text.",
-                        style = BodyMedium.copy(fontSize = 12.sp, lineHeight = 18.sp),
+                        "Rewindd never monitors what other apps you use, your screen time, or your usage habits. You only save what you intentionally share.",
+                        style = BodyMedium.copy(fontSize = 12.5.sp, lineHeight = 18.sp),
                         color = TextDewSage
                     )
                     Box(
@@ -584,8 +624,8 @@ fun PrivacyCenterScreen(
                             .padding(horizontal = 8.dp, vertical = 3.dp)
                     ) {
                         Text(
-                            "100% PROCESSED LOCALLY",
-                            style = BadgeCaps.copy(fontSize = 8.sp),
+                            "ZERO APP MONITORING",
+                            style = BadgeCaps.copy(fontSize = 8.5.sp),
                             color = TextChampagne
                         )
                     }
@@ -615,7 +655,7 @@ fun PrivacyCenterScreen(
                             Icon(
                                 Icons.Default.Layers,
                                 contentDescription = null,
-                                tint = DewSage,
+                                tint = IconBotanical,
                                 modifier = Modifier.size(16.dp)
                             )
                         }
@@ -627,8 +667,8 @@ fun PrivacyCenterScreen(
                         )
                     }
                     Text(
-                        "Saving content relies strictly on Android's native Share Sheet and user-initiated link pasting. Zero background screen recording, zero accessibility service scraping, and zero intrusive overlay popups.",
-                        style = BodyMedium.copy(fontSize = 12.sp, lineHeight = 18.sp),
+                        "Saving content happens only via the native Android Share Sheet or manual paste. Zero accessibility services, zero keyloggers, and zero screen recording.",
+                        style = BodyMedium.copy(fontSize = 12.5.sp, lineHeight = 18.sp),
                         color = TextDewSage
                     )
                     Box(
@@ -638,9 +678,9 @@ fun PrivacyCenterScreen(
                             .padding(horizontal = 8.dp, vertical = 3.dp)
                     ) {
                         Text(
-                            "ZERO ACCESSIBILITY SCRAPING",
-                            style = BadgeCaps.copy(fontSize = 8.sp),
-                            color = TextDewSage
+                            "ZERO ACCESSIBILITY ACCESS",
+                            style = BadgeCaps.copy(fontSize = 8.5.sp),
+                            color = IconBotanical
                         )
                     }
                 }
@@ -674,15 +714,15 @@ fun PrivacyCenterScreen(
                             )
                         }
                         Text(
-                            "4. Zero Ad Brokers & Third-Party SDKs",
+                            "4. Zero Ad Brokers & Analytics SDKs",
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 14.sp,
                             color = TextParchment
                         )
                     }
                     Text(
-                        "No Google Analytics, Firebase Analytics, Facebook SDK, or telemetry beacons. Offline network inspection produces zero outbound packets.",
-                        style = BodyMedium.copy(fontSize = 12.sp, lineHeight = 18.sp),
+                        "No Google Analytics, Firebase, Facebook SDK, or ad tracking beacons. Your content remains completely private on your physical device.",
+                        style = BodyMedium.copy(fontSize = 12.5.sp, lineHeight = 18.sp),
                         color = TextDewSage
                     )
                     Box(
@@ -693,8 +733,8 @@ fun PrivacyCenterScreen(
                     ) {
                         Text(
                             "ZERO OUTBOUND TELEMETRY",
-                            style = BadgeCaps.copy(fontSize = 8.sp),
-                            color = DewSage
+                            style = BadgeCaps.copy(fontSize = 8.5.sp),
+                            color = IconBotanical
                         )
                     }
                 }

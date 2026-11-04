@@ -20,8 +20,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.CloudOff
+import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Inventory2
+import androidx.compose.material.icons.filled.TableChart
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -46,6 +48,9 @@ import com.rewindd.app.core.designsystem.theme.ContentOnChampagne
 import com.rewindd.app.core.designsystem.theme.DewSage
 import com.rewindd.app.core.designsystem.theme.EditorialSerif
 import com.rewindd.app.core.designsystem.theme.HeadlineSmall
+import com.rewindd.app.core.designsystem.theme.IconBotanical
+import com.rewindd.app.core.designsystem.theme.IconGold
+import com.rewindd.app.core.designsystem.theme.IconNeutral
 import com.rewindd.app.core.designsystem.theme.OutlineVariant
 import com.rewindd.app.core.designsystem.theme.SurfaceElevated
 import com.rewindd.app.core.designsystem.theme.SurfaceTray
@@ -57,18 +62,18 @@ import com.rewindd.app.core.designsystem.theme.TextParchment
 import com.rewindd.app.core.designsystem.theme.TitleMedium
 import com.rewindd.app.core.designsystem.theme.ambientGlow
 import com.rewindd.app.core.designsystem.theme.frostedRimHighlight
-import com.rewindd.app.core.designsystem.theme.isDarkThemeGlobal
 import com.rewindd.app.core.designsystem.theme.tactilePress
 
 enum class ExportFormat {
     JSON,
     MARKDOWN,
-    CSV_SCREEN_TIME
+    CSV,
+    CSV_SCREEN_TIME // Backward-compatible alias
 }
 
 /**
  * Screen 41 — Export Data Screen
- * Refactored into Botanical Editorial Noir luxury sanctuary style.
+ * Standalone offline vault exporter with high-contrast botanical styling.
  */
 @Composable
 fun ExportDataScreen(
@@ -144,7 +149,7 @@ fun ExportDataScreen(
                             Icon(
                                 Icons.Default.CloudOff,
                                 contentDescription = null,
-                                tint = DewSage,
+                                tint = IconBotanical,
                                 modifier = Modifier.size(14.dp)
                             )
                             Text(
@@ -173,10 +178,9 @@ fun ExportDataScreen(
                             .padding(horizontal = 8.dp, vertical = 3.dp)
                     ) {
                         Text(
-                            "v2.4.0",
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = TextLichenMuted
+                            "STANDALONE",
+                            style = BadgeCaps.copy(fontSize = 9.sp),
+                            color = IconBotanical
                         )
                     }
                 }
@@ -191,7 +195,7 @@ fun ExportDataScreen(
                 .padding(horizontal = 20.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(18.dp)
         ) {
-            // Manifest Section
+            // Backup Manifest Section
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -215,7 +219,7 @@ fun ExportDataScreen(
                             Icon(
                                 Icons.Default.Inventory2,
                                 contentDescription = null,
-                                tint = if (isDarkThemeGlobal) ChampagneGold else DewSage,
+                                tint = IconGold,
                                 modifier = Modifier.size(20.dp)
                             )
                         }
@@ -227,7 +231,7 @@ fun ExportDataScreen(
                                 color = TextParchment
                             )
                             Text(
-                                "Human-readable standalone files created directly on device storage.",
+                                "Human-readable standalone files created directly on your device.",
                                 style = BodyMedium.copy(fontSize = 12.sp),
                                 color = TextDewSage
                             )
@@ -243,69 +247,28 @@ fun ExportDataScreen(
                             .padding(14.dp)
                     ) {
                         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                Icon(
-                                    Icons.Default.CheckCircle,
-                                    contentDescription = null,
-                                    tint = DewSage,
-                                    modifier = Modifier.size(15.dp)
-                                )
-                                Text(
-                                    "All saved URLs, article titles & reading state",
-                                    fontSize = 12.sp,
-                                    color = TextDewSage
-                                )
-                            }
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                Icon(
-                                    Icons.Default.CheckCircle,
-                                    contentDescription = null,
-                                    tint = DewSage,
-                                    modifier = Modifier.size(15.dp)
-                                )
-                                Text(
-                                    "Personal margin notes & assigned collection tags",
-                                    fontSize = 12.sp,
-                                    color = TextDewSage
-                                )
-                            }
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                Icon(
-                                    Icons.Default.CheckCircle,
-                                    contentDescription = null,
-                                    tint = DewSage,
-                                    modifier = Modifier.size(15.dp)
-                                )
-                                Text(
-                                    "Daily dwell telemetry & 7-day usage aggregates",
-                                    fontSize = 12.sp,
-                                    color = TextDewSage
-                                )
-                            }
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                Icon(
-                                    Icons.Default.CheckCircle,
-                                    contentDescription = null,
-                                    tint = DewSage,
-                                    modifier = Modifier.size(15.dp)
-                                )
-                                Text(
-                                    "Spaced repetition review history & retention stats",
-                                    fontSize = 12.sp,
-                                    color = TextDewSage
-                                )
+                            listOf(
+                                "All saved URLs, article titles & reading state",
+                                "Personal margin notes & assigned collection tags",
+                                "Curated collections & deck organization",
+                                "Spaced repetition review history & queue state"
+                            ).forEach { desc ->
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    Icon(
+                                        Icons.Default.CheckCircle,
+                                        contentDescription = null,
+                                        tint = IconBotanical,
+                                        modifier = Modifier.size(15.dp)
+                                    )
+                                    Text(
+                                        text = desc,
+                                        fontSize = 12.sp,
+                                        color = TextDewSage
+                                    )
+                                }
                             }
                         }
                     }
@@ -358,7 +321,7 @@ fun ExportDataScreen(
                                     Box(
                                         modifier = Modifier
                                             .size(10.dp)
-                                            .background(ChampagneGold, CircleShape)
+                                            .background(IconGold, CircleShape)
                                     )
                                 }
                             }
@@ -370,7 +333,7 @@ fun ExportDataScreen(
                                     color = if (isJson) TextChampagne else TextParchment
                                 )
                                 Text(
-                                    "Portable schema compatible with all tools",
+                                    "Portable schema compatible with all databases",
                                     fontSize = 11.sp,
                                     color = TextDewSage
                                 )
@@ -385,7 +348,7 @@ fun ExportDataScreen(
                             Text(
                                 "RECOMMENDED",
                                 style = BadgeCaps.copy(fontSize = 8.sp),
-                                color = ChampagneGold
+                                color = IconGold
                             )
                         }
                     }
@@ -429,7 +392,7 @@ fun ExportDataScreen(
                                     Box(
                                         modifier = Modifier
                                             .size(10.dp)
-                                            .background(ChampagneGold, CircleShape)
+                                            .background(IconGold, CircleShape)
                                     )
                                 }
                             }
@@ -441,16 +404,28 @@ fun ExportDataScreen(
                                     color = if (isMd) TextChampagne else TextParchment
                                 )
                                 Text(
-                                    "Obsidian / Logseq compatible notes",
+                                    "Obsidian, Logseq & Notion compatible notes",
                                     fontSize = 11.sp,
                                     color = TextDewSage
                                 )
                             }
                         }
+                        Box(
+                            modifier = Modifier
+                                .background(SurfaceTray, RoundedCornerShape(6.dp))
+                                .frostedRimHighlight(shape = RoundedCornerShape(6.dp))
+                                .padding(horizontal = 8.dp, vertical = 3.dp)
+                        ) {
+                            Text(
+                                "NOTES",
+                                style = BadgeCaps.copy(fontSize = 8.sp),
+                                color = IconBotanical
+                            )
+                        }
                     }
                 }
 
-                // Format 3: Screen-Time Telemetry CSV
+                // Format 3: Bookmarks Spreadsheet (.csv)
                 val isCsv = selectedFormat == 3
                 Box(
                     modifier = Modifier
@@ -488,19 +463,19 @@ fun ExportDataScreen(
                                     Box(
                                         modifier = Modifier
                                             .size(10.dp)
-                                            .background(ChampagneGold, CircleShape)
+                                            .background(IconGold, CircleShape)
                                     )
                                 }
                             }
                             Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                                 Text(
-                                    "Screen-Time Telemetry (.csv)",
+                                    "Bookmarks Spreadsheet (.csv)",
                                     fontWeight = FontWeight.SemiBold,
                                     fontSize = 14.sp,
                                     color = if (isCsv) TextChampagne else TextParchment
                                 )
                                 Text(
-                                    "Daily app dwell records and open counts",
+                                    "Tabular export of links, tags, and collections",
                                     fontSize = 11.sp,
                                     color = TextDewSage
                                 )
@@ -515,7 +490,7 @@ fun ExportDataScreen(
                             Text(
                                 "SPREADSHEET",
                                 style = BadgeCaps.copy(fontSize = 8.sp),
-                                color = TextLichenMuted
+                                color = IconNeutral
                             )
                         }
                     }
@@ -530,7 +505,7 @@ fun ExportDataScreen(
                     val format = when (selectedFormat) {
                         1 -> ExportFormat.JSON
                         2 -> ExportFormat.MARKDOWN
-                        else -> ExportFormat.CSV_SCREEN_TIME
+                        else -> ExportFormat.CSV
                     }
                     onPerformExport(format)
                 },
@@ -556,9 +531,9 @@ fun ExportDataScreen(
                         modifier = Modifier.size(18.dp)
                     )
                     Text(
-                        "Export Data Now 💾",
+                        "Export Vault Now",
                         fontWeight = FontWeight.SemiBold,
-                        fontSize = 14.sp,
+                        fontSize = 15.sp,
                         color = ContentOnChampagne
                     )
                 }

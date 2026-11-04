@@ -133,6 +133,25 @@ object VaultDataExporter {
         return clean
     }
 
+    fun exportItemsToCsv(
+        items: List<SavedItemDetailsDomain>
+    ): String {
+        val sb = StringBuilder()
+        sb.append("Title,URL,Collection,Tags,Status,CapturedAt,Note\n")
+        items.forEach { detail ->
+            val item = detail.item
+            val title = sanitizeCsvField(item.title ?: "")
+            val url = sanitizeCsvField(item.url)
+            val col = sanitizeCsvField(detail.collection?.name ?: "")
+            val tags = sanitizeCsvField(detail.tags.joinToString(";") { it.displayName })
+            val status = sanitizeCsvField(item.reviewState.name)
+            val captured = sanitizeCsvField(java.time.Instant.ofEpochMilli(item.capturedAtUtc).toString())
+            val note = sanitizeCsvField(item.note ?: "")
+            sb.append("$title,$url,$col,$tags,$status,$captured,$note\n")
+        }
+        return sb.toString()
+    }
+
     fun exportScreenTimeToCsv(
         usageList: List<com.rewindd.app.domain.model.DailyAppUsage>
     ): String {

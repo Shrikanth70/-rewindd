@@ -310,8 +310,7 @@ fun RewinddNavGraph(
         // Onboarding Screens (Screens 01–06)
         composable("onboarding/welcome") {
             WelcomeScreen(
-                onGetStartedClick = { navController.navigate("onboarding/how_it_works") },
-                onSettingsClick = { navController.navigate("settings") }
+                onGetStartedClick = { navController.navigate("onboarding/how_it_works") }
             )
         }
 
@@ -363,7 +362,7 @@ fun RewinddNavGraph(
                         val (exportContent, filename) = when (format) {
                             ExportFormat.JSON -> exportVaultUseCase.exportJson() to "rewindd-vault-export.json"
                             ExportFormat.MARKDOWN -> exportVaultUseCase.exportMarkdown() to "rewindd-vault-export.md"
-                            ExportFormat.CSV_SCREEN_TIME -> exportVaultUseCase.exportScreenTimeCsv() to "rewindd-screen-time.csv"
+                            ExportFormat.CSV, ExportFormat.CSV_SCREEN_TIME -> exportVaultUseCase.exportCsv() to "rewindd-vault-export.csv"
                         }
 
                         val sendIntent = android.content.Intent().apply {

@@ -66,7 +66,6 @@ import com.rewindd.app.core.designsystem.theme.tactilePress
 @Composable
 fun WelcomeScreen(
     onGetStartedClick: () -> Unit,
-    onSettingsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
@@ -107,39 +106,17 @@ fun WelcomeScreen(
                     color = TextParchment
                 )
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                Box(
+                    modifier = Modifier
+                        .background(SurfaceElevated, CircleShape)
+                        .frostedRimHighlight(shape = CircleShape)
+                        .padding(horizontal = 10.dp, vertical = 4.dp)
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .background(SurfaceElevated, CircleShape)
-                            .frostedRimHighlight(shape = CircleShape)
-                            .padding(horizontal = 10.dp, vertical = 4.dp)
-                    ) {
-                        Text(
-                            text = "V1.0",
-                            style = BadgeCaps.copy(fontSize = 9.sp),
-                            color = TextChampagne
-                        )
-                    }
-
-                    Box(
-                        modifier = Modifier
-                            .size(36.dp)
-                            .frostedRimHighlight(shape = RoundedCornerShape(10.dp))
-                            .background(SurfaceElevated, RoundedCornerShape(10.dp))
-                            .tactilePress()
-                            .clickable { onSettingsClick() },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Settings,
-                            contentDescription = "Settings",
-                            tint = TextDewSage,
-                            modifier = Modifier.size(18.dp)
-                        )
-                    }
+                    Text(
+                        text = "V1.0",
+                        style = BadgeCaps.copy(fontSize = 9.sp),
+                        color = TextChampagne
+                    )
                 }
             }
         }
