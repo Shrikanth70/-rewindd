@@ -113,7 +113,7 @@ fun WelcomeScreen(
                         .padding(horizontal = 10.dp, vertical = 4.dp)
                 ) {
                     Text(
-                        text = "V1.0",
+                        text = "V2.4.0",
                         style = BadgeCaps.copy(fontSize = 9.sp),
                         color = TextChampagne
                     )

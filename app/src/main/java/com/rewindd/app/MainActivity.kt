@@ -77,13 +77,19 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val prefs = getSharedPreferences("rewindd_prefs", MODE_PRIVATE)
-        val hasPurgedData = prefs.getBoolean("has_purged_data", false)
-        val hasSeeded = prefs.getBoolean("prototype_seed_initialized", false)
 
-        if (!hasPurgedData && !hasSeeded) {
-            lifecycleScope.launch {
-                (application as RewinddApplication).savedItemRepository.ensurePrototypeSeedData()
-                prefs.edit().putBoolean("prototype_seed_initialized", true).apply()
+        // Ensure clean vault: purge legacy prototype dummy items if present from past installs
+        lifecycleScope.launch {
+            val repo = (application as RewinddApplication).savedItemRepository
+            listOf(
+                "item-substack-ai-agent",
+                "item-arxiv-rag-eval",
+                "item-instagram-habits-reel",
+                "item-youtube-autonomous-agents"
+            ).forEach { dummyId ->
+                try {
+                    repo.deleteById(dummyId)
+                } catch (_: Exception) {}
             }
         }
 

@@ -553,7 +553,11 @@ fun HomeScreen(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
-                                Text(text = "✨", fontSize = 16.sp)
+                                Box(
+                                    modifier = Modifier
+                                        .size(6.dp)
+                                        .background(DewSage, CircleShape)
+                                )
                                 Text(
                                     text = "INBOX QUEUE",
                                     style = BadgeCaps,
@@ -577,7 +581,7 @@ fun HomeScreen(
                         }
 
                         Text(
-                            text = "Vault in Perfect Harmony 🎯",
+                            text = "Vault in Perfect Harmony",
                             style = TitleMedium.copy(fontSize = 17.sp),
                             fontWeight = FontWeight.SemiBold,
                             color = TextParchment

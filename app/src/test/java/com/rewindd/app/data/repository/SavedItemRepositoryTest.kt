@@ -97,18 +97,10 @@ class SavedItemRepositoryTest {
     }
 
     @Test
-    fun ensurePrototypeSeedData_populatesItemsWhenEmpty() = runBlocking {
+    fun ensurePrototypeSeedData_doesNotPopulateDummyData() = runBlocking {
         repository.ensurePrototypeSeedData()
         val allItems = repository.getAllItems().first()
-        assertEquals(4, allItems.size)
-        assertTrue(allItems.any { it.title.contains("architecture behind a useful AI agent") })
-        assertTrue(allItems.any { it.sourceLabel == "YOUTUBE" })
-        assertTrue(allItems.any { it.sourceLabel == "INSTAGRAM REEL" })
-
-        // Subsequent call does not duplicate
-        repository.ensurePrototypeSeedData()
-        val itemsAfterSecondCall = repository.getAllItems().first()
-        assertEquals(4, itemsAfterSecondCall.size)
+        assertEquals(0, allItems.size)
     }
 
     @Test

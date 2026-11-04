@@ -269,12 +269,6 @@ class SavedItemRepositoryImpl(
     }
 
     override suspend fun ensurePrototypeSeedData() {
-        if (dao.getTotalCount() == 0) {
-            com.rewindd.app.core.database.initialization.PrototypeSeedData.getInitialItems().forEach { item ->
-                try {
-                    dao.insert(item)
-                } catch (ignored: Exception) {}
-            }
-        }
+        // Vault begins completely clean for new users
     }
 }
