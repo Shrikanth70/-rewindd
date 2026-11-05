@@ -162,10 +162,12 @@ class SavedItemRepositoryImpl(
                     val (title, thumb) = UrlMetadataExtractor.extractMetadata(url)
                     val existing = dao.getById(itemId) ?: return@launch
                     val now = System.currentTimeMillis()
-                    if (thumb != null || title != null) {
+                    // Strict additive fallback: only query platform resolver if existing thumb extraction returned null
+                    val effectiveThumb = thumb ?: com.rewindd.app.linkpreview.extra.PlatformPreviewResolver.resolve(url)
+                    if (effectiveThumb != null || title != null) {
                         dao.update(
                             existing.copy(
-                                thumbnailUri = thumb ?: existing.thumbnailUri,
+                                thumbnailUri = effectiveThumb ?: existing.thumbnailUri,
                                 title = title ?: existing.title,
                                 metadataStatus = MetadataStatus.SUCCESS.name,
                                 updatedAtUtc = now
