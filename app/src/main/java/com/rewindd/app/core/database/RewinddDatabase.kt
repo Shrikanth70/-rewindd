@@ -27,7 +27,7 @@ import com.rewindd.app.core.database.entity.UserPreferencesEntity
         DailyAppUsageEntity::class,
         UserPreferencesEntity::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 abstract class RewinddDatabase : RoomDatabase() {
@@ -125,6 +125,14 @@ abstract class RewinddDatabase : RoomDatabase() {
             }
         }
 
+        val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE `saved_items` ADD COLUMN `description` TEXT")
+                db.execSQL("ALTER TABLE `saved_items` ADD COLUMN `siteName` TEXT")
+                db.execSQL("ALTER TABLE `saved_items` ADD COLUMN `authorName` TEXT")
+            }
+        }
+
         fun getInstance(context: Context): RewinddDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -132,7 +140,7 @@ abstract class RewinddDatabase : RoomDatabase() {
                     RewinddDatabase::class.java,
                     "rewindd_vault.db"
                 )
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
                 .build()
                 INSTANCE = instance
                 instance

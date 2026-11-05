@@ -23,6 +23,7 @@ class BottomNavBarVisibilityTest {
 
     @Test
     fun shouldShowBottomBar_returnsFalse_forOnboardingRoutes() {
+        assertFalse(NavigationRules.shouldShowBottomBar("onboarding/tour"))
         assertFalse(NavigationRules.shouldShowBottomBar("onboarding/welcome"))
         assertFalse(NavigationRules.shouldShowBottomBar("onboarding/choose_apps"))
         assertFalse(NavigationRules.shouldShowBottomBar("onboarding/permissions"))

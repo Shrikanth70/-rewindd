@@ -61,4 +61,7 @@ interface SavedItemDao {
 
     @Query("UPDATE saved_items SET collectionId = :collectionId, updatedAtUtc = :updatedAtUtc WHERE id = :id")
     suspend fun updateCollection(id: String, collectionId: String?, updatedAtUtc: Long)
+
+    @Query("SELECT * FROM saved_items WHERE (description IS NULL OR description = '') ORDER BY capturedAtUtc DESC LIMIT 30")
+    suspend fun getItemsNeedingBackfill(): List<SavedItemEntity>
 }

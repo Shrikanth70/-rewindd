@@ -105,7 +105,7 @@ fun RewinddNavGraph(
     val app = context.applicationContext as RewinddApplication
     val prefs = remember { context.getSharedPreferences("rewindd_prefs", Context.MODE_PRIVATE) }
     val hasCompletedOnboarding = remember { prefs.getBoolean("has_completed_onboarding", false) }
-    val startDestination = if (hasCompletedOnboarding) "home" else "onboarding/welcome"
+    val startDestination = if (hasCompletedOnboarding) "home" else "onboarding/tour"
 
     var showFilterSheet by remember { mutableStateOf(false) }
     var showCreateCollectionSheet by remember { mutableStateOf(false) }
@@ -307,7 +307,19 @@ fun RewinddNavGraph(
         startDestination = startDestination,
         modifier = modifier
     ) {
-        // Onboarding Screens (Screens 01–06)
+        // Motion-Graphic Visual Tour (Issue 2)
+        composable("onboarding/tour") {
+            com.rewindd.app.feature.onboarding.VisualTourOnboardingScreen(
+                onCompleteTour = {
+                    prefs.edit().putBoolean("has_completed_onboarding", true).apply()
+                    navController.navigate("home") {
+                        popUpTo("onboarding/tour") { inclusive = true }
+                    }
+                }
+            )
+        }
+
+        // Onboarding Screens (Screens 01–06) - preserved for backward compatibility
         composable("onboarding/welcome") {
             WelcomeScreen(
                 onGetStartedClick = { navController.navigate("onboarding/how_it_works") }
@@ -345,7 +357,7 @@ fun RewinddNavGraph(
                 onBack = { navController.popBackStack() },
                 isDarkMode = isDarkMode,
                 onToggleDarkMode = onToggleDarkMode,
-                onReplayOnboarding = { navController.navigate("onboarding/welcome") },
+                onReplayOnboarding = { navController.navigate("onboarding/tour") },
                 onExportData = { navController.navigate("settings/export") },
                 onDeleteAllData = { showDeleteDataDialog = true },
                 onOpenPrivacyCenter = { navController.navigate("settings/privacy") },

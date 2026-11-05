@@ -58,6 +58,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rewindd.app.core.database.model.SavedItemDetailsDomain
@@ -473,17 +474,20 @@ fun HomeScreen(
                                                 .padding(horizontal = 8.dp, vertical = 2.dp)
                                         ) {
                                             Text(
-                                                text = topItem.sourceLabel?.uppercase() ?: "SAVED LINK",
+                                                text = (topItem.siteName ?: topItem.sourceLabel ?: "SAVED LINK").uppercase(),
                                                 fontSize = 10.sp,
                                                 fontWeight = FontWeight.SemiBold,
                                                 color = DewSage
                                             )
                                         }
 
+                                        val authorOrUrl = topItem.authorName?.let { "by $it" } ?: (topItem.normalizedUrl.take(24) + if (topItem.normalizedUrl.length > 24) "…" else "")
                                         Text(
-                                            text = topItem.normalizedUrl.take(24) + if (topItem.normalizedUrl.length > 24) "…" else "",
+                                            text = authorOrUrl,
                                             style = LabelSmall,
-                                            color = TextLichenMuted
+                                            color = TextLichenMuted,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
                                         )
                                     }
 
@@ -494,8 +498,20 @@ fun HomeScreen(
                                         style = TitleMedium.copy(fontSize = 16.sp, lineHeight = 22.sp),
                                         fontWeight = FontWeight.SemiBold,
                                         color = TextParchment,
-                                        maxLines = 2
+                                        maxLines = 2,
+                                        overflow = TextOverflow.Ellipsis
                                     )
+
+                                    if (!topItem.description.isNullOrBlank()) {
+                                        Spacer(modifier = Modifier.height(4.dp))
+                                        Text(
+                                            text = topItem.description,
+                                            style = BodyMedium.copy(fontSize = 13.sp, lineHeight = 18.sp),
+                                            color = TextLichenMuted,
+                                            maxLines = 3,
+                                            overflow = TextOverflow.Ellipsis
+                                        )
+                                    }
                                 }
                             }
                         }

@@ -70,5 +70,8 @@ data class SavedItem(
     val note: String? = null,
     val metadataStatus: MetadataStatus = MetadataStatus.PENDING,
     val archivedAtUtc: Long? = null,
-    val contentHash: String? = null
+    val contentHash: String? = null,
+    val description: String? = null,
+    val siteName: String? = null,
+    val authorName: String? = null
 )

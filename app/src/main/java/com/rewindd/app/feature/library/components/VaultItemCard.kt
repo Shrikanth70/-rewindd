@@ -164,13 +164,28 @@ fun VaultItemCard(
                             style = HeadlineSmall.copy(fontSize = 16.sp, lineHeight = 22.sp),
                             fontWeight = FontWeight.SemiBold,
                             color = TextParchment,
-                            maxLines = 3,
+                            maxLines = 2,
                             overflow = TextOverflow.Ellipsis
                         )
-                        Spacer(modifier = Modifier.height(6.dp))
+                        if (!item.description.isNullOrBlank()) {
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = item.description,
+                                fontSize = 12.sp,
+                                lineHeight = 16.sp,
+                                color = TextLichenMuted,
+                                maxLines = 3,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(4.dp))
+                        val metaLabel = buildString {
+                            append(item.siteName ?: item.sourceLabel ?: item.normalizedUrl)
+                            item.authorName?.let { append(" • by $it") }
+                        }
                         Text(
-                            text = item.normalizedUrl,
-                            fontSize = 12.sp,
+                            text = metaLabel,
+                            fontSize = 11.sp,
                             color = TextLichenMuted,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
@@ -199,11 +214,27 @@ fun VaultItemCard(
                     overflow = TextOverflow.Ellipsis
                 )
 
+                if (!item.description.isNullOrBlank()) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = item.description,
+                        fontSize = 13.sp,
+                        lineHeight = 18.sp,
+                        color = TextLichenMuted,
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(4.dp))
 
+                val metaLabel = buildString {
+                    append(item.siteName ?: item.sourceLabel ?: item.normalizedUrl)
+                    item.authorName?.let { append(" • by $it") }
+                }
                 Text(
-                    text = item.normalizedUrl,
-                    fontSize = 12.sp,
+                    text = metaLabel,
+                    fontSize = 11.sp,
                     color = TextLichenMuted,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis

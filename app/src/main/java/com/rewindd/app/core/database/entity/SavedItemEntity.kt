@@ -33,7 +33,10 @@ data class SavedItemEntity(
     val note: String?,
     val metadataStatus: String, // PENDING, SUCCESS, FAILED, OFFLINE
     val archivedAtUtc: Long?,
-    val contentHash: String?
+    val contentHash: String?,
+    val description: String? = null,
+    val siteName: String? = null,
+    val authorName: String? = null
 ) {
     fun toDomain(): SavedItem = SavedItem(
         id = id,
@@ -51,7 +54,10 @@ data class SavedItemEntity(
         note = note,
         metadataStatus = try { MetadataStatus.valueOf(metadataStatus) } catch (e: Exception) { MetadataStatus.PENDING },
         archivedAtUtc = archivedAtUtc,
-        contentHash = contentHash
+        contentHash = contentHash,
+        description = description?.let { com.rewindd.app.domain.model.cleanHtmlEntities(it) },
+        siteName = siteName?.let { com.rewindd.app.domain.model.cleanHtmlEntities(it) },
+        authorName = authorName?.let { com.rewindd.app.domain.model.cleanHtmlEntities(it) }
     )
 
     companion object {
@@ -71,7 +77,10 @@ data class SavedItemEntity(
             note = domain.note,
             metadataStatus = domain.metadataStatus.name,
             archivedAtUtc = domain.archivedAtUtc,
-            contentHash = domain.contentHash
+            contentHash = domain.contentHash,
+            description = domain.description,
+            siteName = domain.siteName,
+            authorName = domain.authorName
         )
     }
 }

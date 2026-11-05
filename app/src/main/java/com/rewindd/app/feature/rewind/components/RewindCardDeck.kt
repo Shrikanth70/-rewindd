@@ -236,15 +236,30 @@ fun RewindCardDeck(
                         style = HeadlineSmall.copy(fontSize = 20.sp, lineHeight = 26.sp),
                         fontWeight = FontWeight.SemiBold,
                         color = TextParchment,
-                        maxLines = 4,
+                        maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )
+
+                    if (!item.description.isNullOrBlank()) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = item.description,
+                            style = BodyMedium.copy(fontSize = 13.sp, lineHeight = 18.sp),
+                            color = TextLichenMuted,
+                            maxLines = 3,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
 
                     Spacer(modifier = Modifier.height(6.dp))
 
                     // Author / Domain Subtitle
+                    val subtitle = buildString {
+                        append(item.siteName ?: item.sourceLabel ?: "Specimen")
+                        item.authorName?.let { append(" • $it") }
+                    }
                     Text(
-                        text = if (item.sourceLabel != null) "${item.sourceLabel} • Specimen" else item.normalizedUrl,
+                        text = subtitle,
                         style = LabelSmall,
                         color = TextLichenMuted,
                         maxLines = 1,

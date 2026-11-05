@@ -327,6 +327,18 @@ fun SaveConfirmationCard(
                                 overflow = TextOverflow.Ellipsis
                             )
 
+                            if (!savedItem.description.isNullOrBlank()) {
+                                Spacer(modifier = Modifier.height(2.dp))
+                                Text(
+                                    text = savedItem.description,
+                                    fontSize = 11.sp,
+                                    lineHeight = 15.sp,
+                                    color = OnSurfaceVariant,
+                                    maxLines = 2,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
+
                             if (!collectionName.isNullOrBlank()) {
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Box(

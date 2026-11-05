@@ -13,6 +13,7 @@ import com.rewindd.app.domain.usecase.UrlValidationResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -122,9 +123,8 @@ class SavedItemRepositoryImpl(
 
                     dao.insert(SavedItemEntity.fromDomain(newItem))
 
-                    if (initialMetadataStatus == MetadataStatus.PENDING) {
-                        enrichMetadataAsync(newItem.id, newItem.url)
-                    }
+                    // Always trigger rich background enrichment (title, description, author, site, cover)
+                    enrichMetadataAsync(newItem.id, newItem.url)
 
                     SaveResult.Success(newItem)
                 } catch (e: Exception) {
@@ -134,67 +134,89 @@ class SavedItemRepositoryImpl(
         }
     }
 
-    private fun enrichMetadataAsync(itemId: String, url: String) {
-        repositoryScope.launch {
+    init {
+        // Lazy background backfill for previously saved links with missing metadata
+        repositoryScope.launch(Dispatchers.IO) {
+            delay(2500) // Polite delay after startup
             try {
-                if (InstagramMetadataExtractor.isInstagramUrl(url)) {
-                    val meta = InstagramMetadataExtractor.extract(url)
-                    val existing = dao.getById(itemId) ?: return@launch
-                    val now = System.currentTimeMillis()
-                    if (meta?.thumbnailUrl != null) {
-                        dao.update(
-                            existing.copy(
-                                thumbnailUri = meta.thumbnailUrl,
-                                title = meta.title ?: existing.title,
-                                metadataStatus = MetadataStatus.SUCCESS.name,
-                                updatedAtUtc = now
-                            )
-                        )
-                    } else {
-                        dao.update(
-                            existing.copy(
-                                metadataStatus = MetadataStatus.FAILED.name,
-                                updatedAtUtc = now
-                            )
-                        )
-                    }
-                } else {
-                    val (title, thumb) = UrlMetadataExtractor.extractMetadata(url)
-                    val existing = dao.getById(itemId) ?: return@launch
-                    val now = System.currentTimeMillis()
-                    // Strict additive fallback: only query platform resolver if existing thumb extraction returned null
-                    val effectiveThumb = thumb ?: com.rewindd.app.linkpreview.extra.PlatformPreviewResolver.resolve(url)
-                    if (effectiveThumb != null || title != null) {
-                        dao.update(
-                            existing.copy(
-                                thumbnailUri = effectiveThumb ?: existing.thumbnailUri,
-                                title = title ?: existing.title,
-                                metadataStatus = MetadataStatus.SUCCESS.name,
-                                updatedAtUtc = now
-                            )
-                        )
-                    } else {
-                        dao.update(
-                            existing.copy(
-                                metadataStatus = MetadataStatus.FAILED.name,
-                                updatedAtUtc = now
-                            )
-                        )
-                    }
+                val backfillItems = dao.getItemsNeedingBackfill()
+                for (item in backfillItems) {
+                    try {
+                        enrichItemMetadata(item.id, item.url)
+                        delay(350) // Non-blocking pacing
+                    } catch (_: Exception) {}
                 }
-            } catch (e: Exception) {
-                try {
-                    val existing = dao.getById(itemId) ?: return@launch
+            } catch (_: Exception) {}
+        }
+    }
+
+    private fun enrichMetadataAsync(itemId: String, url: String) {
+        repositoryScope.launch(Dispatchers.IO) {
+            enrichItemMetadata(itemId, url)
+        }
+    }
+
+    private suspend fun enrichItemMetadata(itemId: String, url: String) {
+        try {
+            if (InstagramMetadataExtractor.isInstagramUrl(url)) {
+                val meta = InstagramMetadataExtractor.extract(url)
+                val existing = dao.getById(itemId) ?: return
+                val now = System.currentTimeMillis()
+                if (meta?.thumbnailUrl != null) {
+                    dao.update(
+                        existing.copy(
+                            thumbnailUri = meta.thumbnailUrl,
+                            title = meta.title ?: existing.title,
+                            description = meta.rawCaption ?: existing.description,
+                            siteName = "Instagram",
+                            metadataStatus = MetadataStatus.SUCCESS.name,
+                            updatedAtUtc = now
+                        )
+                    )
+                } else {
                     dao.update(
                         existing.copy(
                             metadataStatus = MetadataStatus.FAILED.name,
-                            updatedAtUtc = System.currentTimeMillis()
+                            updatedAtUtc = now
                         )
                     )
-                } catch (_: Exception) {
-                    // Ignored if DB was closed
                 }
+                return
             }
+
+            val meta = com.rewindd.app.linkpreview.extra.RichLinkMetadataExtractor.extract(url)
+            val existing = dao.getById(itemId) ?: return
+            val now = System.currentTimeMillis()
+
+            val newTitle = meta.title?.takeIf { it.isNotBlank() } ?: existing.title
+            val newThumb = meta.thumbnailUri ?: existing.thumbnailUri
+            val newDesc = meta.description?.takeIf { it.isNotBlank() } ?: existing.description
+            val newSite = meta.siteName?.takeIf { it.isNotBlank() } ?: existing.siteName
+            val newAuthor = meta.authorName?.takeIf { it.isNotBlank() } ?: existing.authorName
+
+            val hasContent = meta.title != null || meta.thumbnailUri != null || meta.description != null
+
+            dao.update(
+                existing.copy(
+                    title = newTitle,
+                    thumbnailUri = newThumb,
+                    description = newDesc,
+                    siteName = newSite,
+                    authorName = newAuthor,
+                    metadataStatus = if (hasContent) MetadataStatus.SUCCESS.name else existing.metadataStatus,
+                    updatedAtUtc = now
+                )
+            )
+        } catch (e: Exception) {
+            try {
+                val existing = dao.getById(itemId) ?: return
+                dao.update(
+                    existing.copy(
+                        metadataStatus = MetadataStatus.FAILED.name,
+                        updatedAtUtc = System.currentTimeMillis()
+                    )
+                )
+            } catch (_: Exception) {}
         }
     }
 
