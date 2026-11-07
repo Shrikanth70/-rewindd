@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Android 12+ system splash.
+        A transparent icon on the off-white background matching the custom splash keeps it invisible.
+        No windowSplashScreenIconBackgroundColor is specified, preventing any dark circular/square icon plate.
+    -->
+    <style name="Theme.Rewindd.Splash" parent="Theme.SplashScreen">
+        <item name="android:windowBackground">@color/splash_background</item>
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_icon_transparent</item>
+        <item name="android:windowSplashScreenBackground">@color/splash_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_icon_transparent</item>
+        <item name="postSplashScreenTheme">@style/Theme.Rewindd</item>
+    </style>
+</resources>

@@ -20,7 +20,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.Style
@@ -32,11 +31,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.rewindd.app.R
+import com.rewindd.app.core.designsystem.components.RewinddWordmark
 import com.rewindd.app.core.designsystem.theme.BadgeCaps
 import com.rewindd.app.core.designsystem.theme.BodyMedium
 import com.rewindd.app.core.designsystem.theme.CanvasNoir
@@ -54,7 +53,6 @@ import com.rewindd.app.core.designsystem.theme.TextChampagne
 import com.rewindd.app.core.designsystem.theme.TextDewSage
 import com.rewindd.app.core.designsystem.theme.TextLichenMuted
 import com.rewindd.app.core.designsystem.theme.TextParchment
-import com.rewindd.app.core.designsystem.theme.TitleMedium
 import com.rewindd.app.core.designsystem.theme.ambientGlow
 import com.rewindd.app.core.designsystem.theme.frostedRimHighlight
 import com.rewindd.app.core.designsystem.theme.tactilePress
@@ -97,13 +95,8 @@ fun WelcomeScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "#rewindd",
-                    fontFamily = FontFamily.SansSerif,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Black,
-                    letterSpacing = (-0.03).em,
-                    color = TextParchment
+                RewinddWordmark(
+                    height = 20.dp
                 )
 
                 Box(

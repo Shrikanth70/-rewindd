@@ -29,6 +29,7 @@ import com.rewindd.app.navigation.TopLevelDestination
 import com.rewindd.app.navigation.navigateToTopLevelDestination
 
 import androidx.activity.enableEdgeToEdge
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 
@@ -73,6 +74,13 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
+        // Drop the system splash on the first real frame. Do not hold it, and
+        // do not play its icon exit — that is the second splash.
+        splashScreen.setKeepOnScreenCondition { false }
+        splashScreen.setOnExitAnimationListener { splashScreenView ->
+            splashScreenView.remove()
+        }
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 

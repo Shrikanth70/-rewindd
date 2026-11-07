@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocalLibrary
 import androidx.compose.material.icons.filled.Style
 import androidx.compose.material3.Icon
@@ -44,7 +44,7 @@ enum class TopLevelDestination(
     val label: String,
     val icon: ImageVector
 ) {
-    HOME("home", "Home", Icons.Filled.CalendarToday),
+    HOME("home", "Home", Icons.Filled.Home),
     REWIND("rewind", "Rewind", Icons.Filled.Style),
     LIBRARY("library", "Library", Icons.Filled.LocalLibrary)
 }

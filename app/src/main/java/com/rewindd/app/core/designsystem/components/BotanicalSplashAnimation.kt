@@ -8,10 +8,12 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -22,21 +24,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.em
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import com.rewindd.app.R
 import com.rewindd.app.core.designsystem.theme.CanvasNoir
-import com.rewindd.app.core.designsystem.theme.ChampagneGold
-import com.rewindd.app.core.designsystem.theme.TextParchment
+import com.rewindd.app.core.designsystem.theme.isDarkThemeGlobal
 import kotlinx.coroutines.delay
 
+private val LightSplashCanvasColor = Color(0xFFF9F7F3)     // Off-white ivory canvas
+private val DarkSplashCanvasColor = Color(0xFF0F1511)      // Deep nocturnal olive-noir canvas
+
 /**
- * Clean, fluid opening splash animation:
- * Animates only the text "#rewindd" with no captions, in clean geometric Poppins styling.
+ * Custom opening splash animation:
+ * Centered "#rewindd" transparent wordmark PNG (theme-aware without background)
+ * with fluid spring reveal and graceful dissolve exit.
  */
 @Composable
 fun BotanicalSplashAnimation(
@@ -47,8 +50,12 @@ fun BotanicalSplashAnimation(
     val alpha = remember { Animatable(0f) }
     var isExiting by remember { mutableStateOf(false) }
 
+    val isDark = isDarkThemeGlobal || isSystemInDarkTheme()
+    val splashBackground = if (isDark) DarkSplashCanvasColor else LightSplashCanvasColor
+    val wordmarkRes = if (isDark) R.drawable.rewindd_wordmark_dark else R.drawable.rewindd_wordmark_light
+
     LaunchedEffect(Unit) {
-        // Step 1: Smooth spring reveal of "#rewindd" text
+        // Step 1: Smooth spring reveal of the "#rewindd" wordmark
         alpha.animateTo(1f, animationSpec = tween(400, easing = FastOutSlowInEasing))
         scale.animateTo(
             targetValue = 1.0f,
@@ -75,17 +82,15 @@ fun BotanicalSplashAnimation(
         Box(
             modifier = modifier
                 .fillMaxSize()
-                .background(CanvasNoir),
+                .background(splashBackground),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = "#rewindd",
-                fontFamily = FontFamily.SansSerif,
-                fontSize = 40.sp,
-                fontWeight = FontWeight.Black,
-                letterSpacing = (-0.03).em,
-                color = TextParchment,
+            Image(
+                painter = painterResource(id = wordmarkRes),
+                contentDescription = "#rewindd",
+                contentScale = ContentScale.Fit,
                 modifier = Modifier
+                    .width(260.dp)
                     .scale(scale.value)
                     .alpha(alpha.value)
             )

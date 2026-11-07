@@ -56,12 +56,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.rewindd.app.R
+import com.rewindd.app.core.designsystem.components.RewinddWordmark
 import com.rewindd.app.core.designsystem.theme.BadgeCaps
 import com.rewindd.app.core.designsystem.theme.BodyMedium
 import com.rewindd.app.core.designsystem.theme.ChampagneGold
 import com.rewindd.app.core.designsystem.theme.DewSage
 import com.rewindd.app.core.designsystem.theme.HeadlineSmall
-import com.rewindd.app.core.designsystem.theme.Poppins
 import com.rewindd.app.core.designsystem.theme.SurfaceElevated
 import com.rewindd.app.core.designsystem.theme.SurfaceTray
 import com.rewindd.app.core.designsystem.theme.SurfaceVitrine
@@ -144,12 +145,8 @@ fun VisualTourOnboardingScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                Text(
-                    text = "#rewindd",
-                    fontFamily = Poppins,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp,
-                    color = if (isDarkThemeGlobal) TextParchment else Color(0xFF141D16)
+                RewinddWordmark(
+                    height = 20.dp
                 )
             }
 
@@ -571,7 +568,12 @@ private fun SceneSelectRewinddInShareSheet(isReduceMotion: Boolean) {
                 ) {
                     ShareTargetMock(name = "Messages", icon = "💬", isSelected = false)
                     // Rewindd Chosen Target with Highlight
-                    ShareTargetMock(name = "Rewindd", icon = "⚡", isSelected = true)
+                    ShareTargetMock(
+                        name = "Rewindd",
+                        icon = "",
+                        isSelected = true,
+                        showWordmark = true
+                    )
                     ShareTargetMock(name = "Copy Link", icon = "🔗", isSelected = false)
                     ShareTargetMock(name = "Drive", icon = "📁", isSelected = false)
                 }
@@ -581,7 +583,12 @@ private fun SceneSelectRewinddInShareSheet(isReduceMotion: Boolean) {
 }
 
 @Composable
-private fun ShareTargetMock(name: String, icon: String, isSelected: Boolean) {
+private fun ShareTargetMock(
+    name: String,
+    icon: String,
+    isSelected: Boolean,
+    showWordmark: Boolean = false
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp)
@@ -600,10 +607,17 @@ private fun ShareTargetMock(name: String, icon: String, isSelected: Boolean) {
                 ),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = icon,
-                fontSize = 22.sp
-            )
+            if (showWordmark) {
+                RewinddWordmark(
+                    height = 9.dp,
+                    contentDescription = null
+                )
+            } else {
+                Text(
+                    text = icon,
+                    fontSize = 22.sp
+                )
+            }
         }
         Text(
             text = name,

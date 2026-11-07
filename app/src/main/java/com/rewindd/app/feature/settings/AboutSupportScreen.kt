@@ -426,6 +426,34 @@ fun AboutSupportScreen(
                         )
                     }
                 }
+
+                // Developed By Card
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .ambientGlow(offsetY = 2.dp, radius = 10.dp)
+                        .background(SurfaceVitrine, RoundedCornerShape(16.dp))
+                        .frostedRimHighlight(shape = RoundedCornerShape(16.dp))
+                        .padding(16.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Text(
+                            text = "DEVELOPED BY",
+                            style = BadgeCaps.copy(fontSize = 10.sp, letterSpacing = 0.16.sp),
+                            color = TextLichenMuted
+                        )
+                        Text(
+                            text = "SHRIKANTH",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = if (isDarkThemeGlobal) TextChampagne else DewSage
+                        )
+                    }
+                }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
